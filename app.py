@@ -1,9 +1,11 @@
 import pickle
 
+#importing the necessary files
 from flask import Flask, render_template, jsonify, request
 import numpy as np
 model = pickle.load(open('final_model.pickle','rb'))
 
+#initialising the flask app
 app = Flask(__name__)
 
 @app.route('/')
@@ -31,6 +33,8 @@ def predict():
         data = np.array([[CRIM,ZN, INDUS, CHAS, NOX, RM, AGE, DIS, RAD, TAX,PTRATIO, B, LSTAT]])
         mean = np.load('mean.npy')
         std = np.load('std.npy')
+        
+        #creating a list to apply the Scaling using the mean and Standard Deviation we learned from our training model
         new = [[(data[0][i] - mean[i])/std[i] for i in range(0,13)]]
 
         my_prediction = model.predict(new)
